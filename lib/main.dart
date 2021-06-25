@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hackathon2021/home.dart';
+
+import 'package:hackathon2021/screens/welcome/body.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: WelcomeScreen(),
     );
   }
 }
