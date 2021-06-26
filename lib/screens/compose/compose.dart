@@ -11,6 +11,13 @@ class ComposePage extends StatefulWidget {
 }
 
 class _ComposePageState extends State<ComposePage> {
+  late String? currentSchedule;
+  List<String> schedules = [
+    "Yearly Schedule",
+    "Monthly Schedule",
+    "Weekly Schedule",
+    "Recurring Schedule"
+  ];
   List<String> actions = ["From", "To", "Cc"];
   @override
   Widget build(BuildContext context) {
@@ -81,6 +88,24 @@ class _ComposePageState extends State<ComposePage> {
                   color: Colors.black,
                 ),
               ),
+            ),
+            DropdownButton<String>(
+              hint: Text(
+                "Choose Schedule",
+                style: TextStyle(
+                  fontSize: width * 0.05,
+                ),
+              ),
+              items: schedules.map((String dropDownItem) {
+                return DropdownMenuItem<String>(
+                  value: dropDownItem,
+                  child: Text(dropDownItem),
+                );
+              }).toList(),
+              value: currentSchedule,
+              onChanged: (newSchedule) {
+                currentSchedule = newSchedule;
+              },
             ),
             Expanded(
               child: TextField(
