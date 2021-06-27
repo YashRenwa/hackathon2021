@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon2021/utilities/colors.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../utilities/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hackathon2021/auth/auth.dart';
 
 class ComposePage extends StatefulWidget {
   const ComposePage({Key? key}) : super(key: key);
@@ -11,6 +13,9 @@ class ComposePage extends StatefulWidget {
 }
 
 class _ComposePageState extends State<ComposePage> {
+  String subject = '';
+  String body = '';
+  String content = '';
   DateTime pickedDate = DateTime.now();
   TimeOfDay pickedTime = TimeOfDay.now();
   String? selectedDay = "Monday";
@@ -21,8 +26,22 @@ class _ComposePageState extends State<ComposePage> {
     "Weekly Schedule",
     "Recurring Schedule"
   ];
+  Auth _auth = new Auth(FirebaseAuth.instance);
+  var currentuser;
 
-  List<String> actions = ["From", "To", "Cc"];
+  get_current_user() {
+    currentuser = FirebaseAuth.instance.currentUser;
+    print(currentuser.email);
+  }
+
+  @override
+  void initState() {
+    get_current_user();
+    super.initState();
+  }
+
+  List<String> actions = ["To", "Cc"];
+  List<String> stringactions = ['', ''];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -135,9 +154,30 @@ class _ComposePageState extends State<ComposePage> {
                 child: Icon(Icons.calendar_today),
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(right: width * 0.04),
-              child: Icon(Icons.send),
+            GestureDetector(
+              onTap: () {
+                FirebaseFirestore.instance.collection('data').add(
+                  {
+                    'address': stringactions[0],
+                    'cc': stringactions[1],
+                    'choice': currentSchedule,
+                    'content': body,
+                    'date': pickedDate.day,
+                    'day': selectedDay,
+                    'month': pickedDate.month,
+                    'specific_time': pickedTime.hour,
+                    'status': false,
+                    'subject': subject,
+                    'time': pickedDate,
+                    'user': currentuser.email,
+                  },
+                );
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: width * 0.04),
+                child: Icon(Icons.send),
+              ),
             ),
           ],
         ),
@@ -145,7 +185,7 @@ class _ComposePageState extends State<ComposePage> {
           children: [
             ListView.builder(
               shrinkWrap: true,
-              itemCount: 3,
+              itemCount: 2,
               itemBuilder: (context, index) {
                 return Container(
                   width: width,
@@ -166,6 +206,12 @@ class _ComposePageState extends State<ComposePage> {
                               margin: EdgeInsets.only(left: width * 0.05),
                               width: width * 0.77,
                               child: TextField(
+                                onChanged: (value) {
+                                  setState(() {
+                                    stringactions[index] = value;
+                                  });
+                                  print(stringactions[index]);
+                                },
                                 style: TextStyle(fontSize: width * 0.045),
                                 cursorHeight: height * 0.03,
                                 decoration: InputDecoration(
@@ -187,6 +233,12 @@ class _ComposePageState extends State<ComposePage> {
               },
             ),
             TextField(
+              onChanged: (value) {
+                setState(() {
+                  subject = value;
+                });
+                print(subject);
+              },
               style: TextStyle(fontSize: width * 0.05),
               cursorHeight: height * 0.03,
               decoration: InputDecoration(
@@ -201,6 +253,12 @@ class _ComposePageState extends State<ComposePage> {
             ),
             Expanded(
               child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    body = value;
+                  });
+                  print(subject);
+                },
                 style: TextStyle(fontSize: width * 0.05),
                 cursorHeight: height * 0.03,
                 decoration: InputDecoration(

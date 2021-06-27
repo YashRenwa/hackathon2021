@@ -4,6 +4,7 @@ import 'package:hackathon2021/auth/auth.dart';
 import 'package:hackathon2021/screens/compose/compose.dart';
 import 'package:hackathon2021/screens/welcome/body.dart';
 import 'package:hackathon2021/utilities/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,6 +15,59 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Auth _auth = new Auth(FirebaseAuth.instance);
+  final _firestore = FirebaseFirestore.instance;
+  var currentuser;
+
+  get_current_user() {
+    currentuser = FirebaseAuth.instance.currentUser;
+  }
+
+  @override
+  void initState() {
+    get_current_user();
+    super.initState();
+  }
+
+  Widget mailcard(String subjectdata, bool sent_status, String user) {
+    if (user == currentuser.email) {
+      return Container(
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        height: 100,
+        width: double.maxFinite,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    subjectdata,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Row(
+                  children: [
+                    sent_status
+                        ? Icon(Icons.check_box)
+                        : Icon(Icons.lock_clock),
+                    sent_status ? Text('sent') : Text('waiting'),
+                  ],
+                )
+              ],
+            ),
+          ),
+          elevation: 5,
+        ),
+      );
+    } else
+      return Container();
+  }
+
+  final Stream<QuerySnapshot> _emailStream =
+      FirebaseFirestore.instance.collection('data').snapshots();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -59,51 +113,29 @@ class _HomeState extends State<Home> {
   }
 
   Widget getBody(size) {
-    return (Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Mailcard(
-          subjectdata: 'SubjectSubjectSubjectSubject',
-        ),
-      ],
-    ));
-  }
-}
+    return StreamBuilder<QuerySnapshot>(
+      stream: _emailStream,
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError) {
+          return Text('Something went wrong');
+        }
 
-class Mailcard extends StatelessWidget {
-  Mailcard({@required subjectdata});
-  String subjectdata = 'testingtestingtesting';
-  bool sent_status = false;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-      height: 100,
-      width: double.maxFinite,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  subjectdata,
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Row(
-                children: [
-                  sent_status ? Icon(Icons.check_box) : Icon(Icons.lock_clock),
-                  sent_status ? Text('sent') : Text('waiting'),
-                ],
-              )
-            ],
-          ),
-        ),
-        elevation: 5,
-      ),
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+
+        return new ListView(
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+
+            return mailcard(
+              data['subject'],
+              data['status'],
+              data['user'],
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }
