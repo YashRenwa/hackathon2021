@@ -15,53 +15,47 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      body:getBody(size,context),
+      body: getBody(size, context),
     );
   }
-  
-  
-  Widget getBody(size,context){
+
+  Widget getBody(size, context) {
     return Container(
+      width: size.width,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             "WELCOME",
-            style: TextStyle(
-              fontWeight: FontWeight.bold
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height:size.height*0.1),
-          SvgPicture.asset("assets/images/welcome.svg", height:size.height*0.4),
-          SizedBox(height:size.height*0.1),
+          SizedBox(height: size.height * 0.1),
+          SvgPicture.asset("assets/images/welcome.svg",
+              height: size.height * 0.4),
+          SizedBox(height: size.height * 0.1),
           RoundButton(
-            text:"LOGIN",
-            color: kPrimaryColor,
-            textColor: kTextColor,
-            press:(){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
-              );
-            }
-
-          ),
-          RoundButton(
-              text:"SIGN-UP",
+              text: "LOGIN",
               color: kPrimaryColor,
               textColor: kTextColor,
-              press:(){
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Login()),
+                );
+              }),
+          RoundButton(
+              text: "SIGN-UP",
+              color: kPrimaryColor,
+              textColor: kTextColor,
+              press: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => SignupScreen()),
                 );
-              }
-
-          ),
+              }),
         ],
       ),
     );
-    
   }
 }
-

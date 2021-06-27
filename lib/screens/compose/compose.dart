@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:hackathon2021/utilities/colors.dart';
 
@@ -11,7 +9,7 @@ class ComposePage extends StatefulWidget {
 }
 
 class _ComposePageState extends State<ComposePage> {
-  late String? currentSchedule;
+  String currentSchedule = "Yearly Schedule";
   List<String> schedules = [
     "Yearly Schedule",
     "Monthly Schedule",
@@ -105,7 +103,7 @@ class _ComposePageState extends State<ComposePage> {
               value: currentSchedule,
               onChanged: (newSchedule) {
                 setState(() {
-                  currentSchedule = newSchedule;
+                  currentSchedule = newSchedule!;
                 });
               },
             ),
