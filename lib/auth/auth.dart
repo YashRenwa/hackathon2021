@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Auth {
   FirebaseAuth _auth;
+  bool isSignedWithGoogle = false;
 
   Auth(this._auth);
 
@@ -26,7 +28,6 @@ class Auth {
   }
 
   Future<User?> signInWithGoogle({required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
     final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -45,30 +46,47 @@ class Auth {
 
       try {
         final UserCredential userCredential =
-            await auth.signInWithCredential(credential);
+            await _auth.signInWithCredential(credential);
 
         user = userCredential.user;
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
-          // handle the error here
-          print(e.code);
+          ScaffoldMessenger.of(context).showSnackBar(
+            Auth.customSnackBar(
+              content:
+                  'The account already exists with a different credential.',
+            ),
+          );
         } else if (e.code == 'invalid-credential') {
-          // handle the error here
-          print(e.code);
+          ScaffoldMessenger.of(context).showSnackBar(
+            Auth.customSnackBar(
+              content: 'Error occurred while accessing credentials. Try again.',
+            ),
+          );
         }
       } catch (e) {
-        // handle the error here
-        print(e);
+        ScaffoldMessenger.of(context).showSnackBar(
+          Auth.customSnackBar(
+            content: 'Error occurred using Google Sign-In. Try again.',
+          ),
+        );
       }
     } else {
       print("Error");
     }
 
+    isSignedWithGoogle = true;
+
     return user;
   }
 
   Future<void> signOut() async {
-    await _auth.signOut();
+    if (isSignedWithGoogle) {
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      googleSignIn.signOut();
+    } else {
+      await _auth.signOut();
+    }
   }
 
   bool isLoggedIn() {
@@ -81,5 +99,15 @@ class Auth {
       }
     });
     return result;
+  }
+
+  static SnackBar customSnackBar({required String content}) {
+    return SnackBar(
+      backgroundColor: Colors.black,
+      content: Text(
+        content,
+        style: TextStyle(color: Colors.redAccent, letterSpacing: 0.5),
+      ),
+    );
   }
 }

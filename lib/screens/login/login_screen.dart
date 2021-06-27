@@ -169,9 +169,28 @@ class _LoginState extends State<Login> {
                         SizedBox(height: 20),
                         GestureDetector(
                           onTap: () async {
+                            // setState(() {
+                            //   isLoading = true;
+                            // });
                             var user =
                                 await _auth.signInWithGoogle(context: context);
-                            print(user);
+                            if (user != null) {
+                              setState(() {
+                                errorMessage = "Login Successful";
+                                isLoading = false;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Home(),
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                errorMessage = "Login Failed";
+                                isLoading = false;
+                              });
+                            }
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
