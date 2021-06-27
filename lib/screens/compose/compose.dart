@@ -104,7 +104,9 @@ class _ComposePageState extends State<ComposePage> {
               }).toList(),
               value: currentSchedule,
               onChanged: (newSchedule) {
-                currentSchedule = newSchedule;
+                setState(() {
+                  currentSchedule = newSchedule;
+                });
               },
             ),
             Expanded(
