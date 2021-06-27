@@ -24,7 +24,7 @@ while(True):
             server.ehlo()
             print("server connected")
 
-            server.login('noreplymailmanagerapp@gmail.com','Nihalpuram2019')
+            server.login('noreplymailmanagerapp@gmail.com','**Redacted**')
             print("login successful")
             subject = subject
             body = content
