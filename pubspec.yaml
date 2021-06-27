@@ -38,6 +38,8 @@ dependencies:
   firebase_auth:
   firebase_core:
   flutter_easyloading: ^3.0.0
+  google_sign_in:
+  provider:
 
 dev_dependencies:
   flutter_test:

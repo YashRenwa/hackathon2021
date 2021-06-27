@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,7 @@ import 'package:hackathon2021/home.dart';
 import 'package:hackathon2021/screens/sign-up/Signup.dart';
 import 'package:hackathon2021/utilities/colors.dart';
 import 'package:hackathon2021/components/input_field.dart';
+import 'package:provider/src/provider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -16,7 +18,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Auth _auth = new Auth();
+  Auth _auth = new Auth(FirebaseAuth.instance);
   String email = "";
   String password = "";
   bool isLoading = false;
@@ -145,6 +147,10 @@ class _LoginState extends State<Login> {
                             });
                             var result = await _auth.logIn(email, password);
                             if (result == "success") {
+                              setState(() {
+                                errorMessage = result;
+                                isLoading = false;
+                              });
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -162,7 +168,11 @@ class _LoginState extends State<Login> {
                         ),
                         SizedBox(height: 20),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            var user =
+                                await _auth.signInWithGoogle(context: context);
+                            print(user);
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -264,6 +274,10 @@ class _LoginState extends State<Login> {
       },
       child: Scaffold(
         appBar: AppBar(
+          title: Text(
+            "login",
+            style: TextStyle(color: Colors.black),
+          ),
           elevation: 0,
           brightness: Brightness.light,
           backgroundColor: Colors.white,

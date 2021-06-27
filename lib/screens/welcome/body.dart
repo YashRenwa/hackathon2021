@@ -14,8 +14,11 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: getBody(size, context),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: getBody(size, context),
+      ),
     );
   }
 
