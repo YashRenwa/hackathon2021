@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
               },
               child: Container(
                 margin: EdgeInsets.only(right: size.width * 0.03),
-                child: Icon(Icons.logout_outlined),
+                child: Icon(Icons.logout),
               ),
             )
           ],

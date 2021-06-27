@@ -2,15 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hackathon2021/auth/auth.dart';
 import 'package:hackathon2021/components/loading.dart';
 import "package:hackathon2021/components/round_button.dart";
 import 'package:hackathon2021/home.dart';
 import 'package:hackathon2021/screens/sign-up/Signup.dart';
 import 'package:hackathon2021/utilities/colors.dart';
-import 'package:hackathon2021/components/input_field.dart';
-import 'package:provider/src/provider.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -129,7 +126,7 @@ class _LoginState extends State<Login> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         Text(
                           errorMessage,
                           style: TextStyle(
@@ -137,7 +134,7 @@ class _LoginState extends State<Login> {
                             fontSize: size.width * 0.04,
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         RoundButton(
                           color: kPrimaryColor,
                           text: "LOGIN",
@@ -230,7 +227,7 @@ class _LoginState extends State<Login> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                SignupScreen()))
+                                                Signup()))
                                   },
                               child: Text(
                                 "Don't Have an Account? Sign up",
@@ -294,9 +291,10 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "login",
+            "LOGIN",
             style: TextStyle(color: Colors.black),
           ),
+          centerTitle: true,
           elevation: 0,
           brightness: Brightness.light,
           backgroundColor: Colors.white,
