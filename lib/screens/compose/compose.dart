@@ -45,35 +45,48 @@ class _ComposePageState extends State<ComposePage> {
         body: Column(
           children: [
             ListView.builder(
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(left: width * 0.04),
-                    width: width,
-                    child: Row(
-                      children: [
-                        Text(
-                          actions[index],
-                          style: TextStyle(
-                            fontSize: width * 0.05,
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: width * 0.05),
-                          width: width * 0.77,
-                          child: TextField(
-                            style: TextStyle(fontSize: width * 0.045),
-                            cursorHeight: height * 0.03,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
+              shrinkWrap: true,
+              itemCount: 3,
+              itemBuilder: (context, index) {
+                return Container(
+                  width: width,
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: width * 0.04),
+                        child: Row(
+                          children: [
+                            Text(
+                              actions[index],
+                              style: TextStyle(
+                                fontSize: width * 0.05,
+                                color: Colors.grey,
+                              ),
                             ),
-                          ),
+                            Container(
+                              margin: EdgeInsets.only(left: width * 0.05),
+                              width: width * 0.77,
+                              child: TextField(
+                                style: TextStyle(fontSize: width * 0.045),
+                                cursorHeight: height * 0.03,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                }),
+                      ),
+                      SizedBox(
+                        width: width,
+                        height: height * 0.001,
+                        child: Container(color: Colors.grey),
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
             TextField(
               style: TextStyle(fontSize: width * 0.05),
               cursorHeight: height * 0.03,
@@ -83,7 +96,7 @@ class _ComposePageState extends State<ComposePage> {
                 hintText: "Subject",
                 hintStyle: TextStyle(
                   fontSize: width * 0.05,
-                  color: Colors.black,
+                  color: Colors.grey,
                 ),
               ),
             ),

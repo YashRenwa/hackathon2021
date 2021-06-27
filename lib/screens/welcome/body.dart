@@ -27,8 +27,9 @@ class WelcomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            "WELCOME",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            "Mail Manager",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, fontSize: size.width * 0.07),
           ),
           SizedBox(height: size.height * 0.1),
           SvgPicture.asset("assets/images/welcome.svg",

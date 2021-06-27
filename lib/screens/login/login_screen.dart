@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
   String email = "";
   String password = "";
   bool isLoading = false;
+  String errorMessage = "";
 
   Widget getBody(Size size, BuildContext context) {
     return isLoading
@@ -27,20 +28,14 @@ class _LoginState extends State<Login> {
         : SingleChildScrollView(
             child: Container(
               height: size.height,
-              width: double.infinity,
+              width: size.width,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(
-                          "Login",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 20),
+                        SizedBox(height: size.height * 0.1),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 40),
                           child: Column(
@@ -68,24 +63,25 @@ class _LoginState extends State<Login> {
                                     decoration: InputDecoration(
                                       contentPadding: EdgeInsets.symmetric(
                                           vertical: 0, horizontal: 10),
-                                      fillColor: Colors.grey,
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                           color: kPrimaryColor,
                                           width: 2,
                                         ),
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: kPrimaryColor, width: 2),
-                                        borderRadius: BorderRadius.circular(20),
+                                        borderRadius: BorderRadius.circular(10),
                                       ),
+                                      focusColor: kPrimaryColor,
                                     ),
                                   ),
                                   SizedBox(height: 10),
                                 ],
                               ),
+                              SizedBox(height: 20),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -116,19 +112,27 @@ class _LoginState extends State<Login> {
                                             width: 2,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                              BorderRadius.circular(10),
                                         ),
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: kPrimaryColor, width: 2),
                                           borderRadius:
-                                              BorderRadius.circular(20),
+                                              BorderRadius.circular(10),
                                         )),
                                   ),
                                   SizedBox(height: 10),
                                 ],
                               )
                             ],
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          errorMessage,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: size.width * 0.04,
                           ),
                         ),
                         SizedBox(height: 20),
@@ -147,37 +151,43 @@ class _LoginState extends State<Login> {
                                   builder: (context) => Home(),
                                 ),
                               );
+                            } else {
+                              setState(() {
+                                errorMessage = result;
+                                isLoading = false;
+                              });
                             }
                           },
                           textColor: Colors.white,
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {},
-                          child: Container(
-                            alignment: Alignment.center,
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 40, vertical: 10),
-                            child: Text(
-                              "Login with Google",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: size.height * 0.03,
+                                child: Image(
+                                  image: AssetImage("assets/images/search.png"),
+                                ),
                               ),
-                            ),
+                              Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(left: 20),
+                                child: Text(
+                                  "Login with Google",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(height: 10),
-                        Container(
-                          width: size.width * 0.5,
-                          height: size.height * 0.1,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: kPrimaryColor,
-                          ),
-                          child: SvgPicture.asset("assets/images/google.svg"),
-                        ),
                         SizedBox(
                           height: 20,
                         ),
@@ -186,21 +196,21 @@ class _LoginState extends State<Login> {
                           margin: EdgeInsets.symmetric(
                               horizontal: 40, vertical: 10),
                           child: GestureDetector(
-                            onTap: () => {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignupScreen()))
-                            },
-                            child: Text(
-                              "Don't Have an Account? Sign up",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
+                              onTap: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                SignupScreen()))
+                                  },
+                              child: Text(
+                                "Don't Have an Account? Sign up",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              )),
                         ),
                       ],
                     ),

@@ -16,6 +16,6 @@ class Auth {
         return 'Wrong password provided for that user';
       }
     }
-    return "failure";
+    return "Enter all fields";
   }
 }
