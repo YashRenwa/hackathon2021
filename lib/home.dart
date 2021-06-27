@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  Widget mailcard(String subjectdata, bool sent_status, String user) {
+  Widget mailcard(String subjectdata, bool sent_status, String user, document) {
     if (user == currentuser.email) {
       return Container(
         padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -53,6 +53,18 @@ class _HomeState extends State<Home> {
                         ? Icon(Icons.check_box)
                         : Icon(Icons.lock_clock),
                     sent_status ? Text('sent') : Text('waiting'),
+                    GestureDetector(
+                      onTap: () async {
+                        await FirebaseFirestore.instance
+                            .runTransaction((Transaction myTransaction) async {
+                          await myTransaction.delete(document.reference);
+                        });
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 10, right: 10),
+                        child: Icon(Icons.delete),
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -129,10 +141,7 @@ class _HomeState extends State<Home> {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
             return mailcard(
-              data['subject'],
-              data['status'],
-              data['user'],
-            );
+                data['subject'], data['status'], data['user'], document);
           }).toList(),
         );
       },

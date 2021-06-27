@@ -16,287 +16,285 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  // Auth _auth = new Auth(FirebaseAuth.instance);
-  // String email = "";
-  String error ="";
+  Auth _auth = new Auth(FirebaseAuth.instance);
+  String email = "";
+  String error = "";
   String password = "";
   String cnfpassword = "";
   bool isLoading = false;
-  // String errorMessage = "";
+  String errorMessage = "";
 
   Widget getBody(Size size, BuildContext context) {
-    if(password!=cnfpassword ) {
+    if (password != cnfpassword) {
       error = "passwords do not match";
-    }else{
-      error="";
+    } else {
+      error = "";
     }
     return isLoading
         ? LoadingWidget()
         : SingleChildScrollView(
-      child: Container(
-        height: size.height,
-        width: size.width,
-        child: Column(
-          children: [
-            Expanded(
+            child: Container(
+              height: size.height,
+              width: size.width,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: size.height * 0.1),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 40),
+                  Expanded(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Email",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              obscureText: false,
-                              onChanged: (value) {
-                                setState(() {
-                                  // email = value;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 10),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: kPrimaryColor,
-                                    width: 2,
+                        SizedBox(height: size.height * 0.1),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 40),
+                          child: Column(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "Email",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87),
                                   ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: kPrimaryColor, width: 2),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                focusColor: kPrimaryColor,
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextField(
+                                    obscureText: false,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        email = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0, horizontal: 10),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: kPrimaryColor,
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: kPrimaryColor, width: 2),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      focusColor: kPrimaryColor,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
                               ),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Password",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              obscureText: true,
-                              onChanged: (value) {
-                                setState(() {
-                                  password = value;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  fillColor: Colors.grey,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: kPrimaryColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius:
-                                    BorderRadius.circular(10),
+                              SizedBox(height: 20),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "Password",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87),
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: kPrimaryColor, width: 2),
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                  )),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Confirm Password",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87),
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            TextField(
-                              obscureText: true,
-                              onChanged: (value) {
-                                setState(() {
-                                  cnfpassword = value;
-                                });
-                              },
-                              decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  fillColor: Colors.grey,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: kPrimaryColor,
-                                      width: 2,
-                                    ),
-                                    borderRadius:
-                                    BorderRadius.circular(10),
+                                  SizedBox(
+                                    height: 5,
                                   ),
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: kPrimaryColor, width: 2),
-                                    borderRadius:
-                                    BorderRadius.circular(10),
-                                  )),
-                            ),
-                            SizedBox(height: 10),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    error,
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: size.width * 0.04,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  RoundButton(
-                    color: kPrimaryColor,
-                    text: "SIGN-UP",
-                    press: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      // var result = await _auth.logIn(email, password);
-                      // if (result == "success") {
-                      //   setState(() {
-                      //     errorMessage = result;
-                      //     isLoading = false;
-                      //   });
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => Home(),
-                      //     ),
-                      //   );
-                      // } else {
-                      //   setState(() {
-                      //     // errorMessage = result;
-                      //     // isLoading = false;
-                      //   });
-                      // }
-                    },
-                    textColor: Colors.white,
-                  ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () async {
-                      // setState(() {
-                      //   isLoading = true;
-                      // });
-                      // var user =
-                      // await _auth.signInWithGoogle(context: context);
-                      // if (user != null) {
-                      //   setState(() {
-                      //     // errorMessage = "Login Successful";
-                      //     isLoading = false;
-                      //   });
-                      //   Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => Home(),
-                      //     ),
-                      //   );
-                      // } else {
-                      //   setState(() {
-                      //     // errorMessage = "Login Failed";
-                      //     isLoading = false;
-                      //   });
-                      // }
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: size.height * 0.03,
-                          child: Image(
-                            image: AssetImage("assets/images/search.png"),
+                                  TextField(
+                                    obscureText: true,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        password = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10),
+                                        fillColor: Colors.grey,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: kPrimaryColor,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: kPrimaryColor, width: 2),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        )),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
+                              ),
+                              SizedBox(height: 20),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    "Confirm Password",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  TextField(
+                                    obscureText: true,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        cnfpassword = value;
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 10),
+                                        fillColor: Colors.grey,
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: kPrimaryColor,
+                                            width: 2,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: kPrimaryColor, width: 2),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        )),
+                                  ),
+                                  SizedBox(height: 10),
+                                ],
+                              )
+                            ],
                           ),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          errorMessage,
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: size.width * 0.04,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        RoundButton(
+                          color: kPrimaryColor,
+                          text: "SIGN-UP",
+                          press: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            var result = await _auth.signIn(email, password);
+                            if (result == "success") {
+                              setState(() {
+                                errorMessage = result;
+                                isLoading = false;
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Home(),
+                                ),
+                              );
+                            } else {
+                              setState(() {
+                                errorMessage = result;
+                                isLoading = false;
+                              });
+                            }
+                          },
+                          textColor: Colors.white,
+                        ),
+                        SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () async {
+                            // setState(() {
+                            //   isLoading = true;
+                            // });
+                            // var user =
+                            // await _auth.signInWithGoogle(context: context);
+                            // if (user != null) {
+                            //   setState(() {
+                            //     // errorMessage = "Login Successful";
+                            //     isLoading = false;
+                            //   });
+                            //   Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) => Home(),
+                            //     ),
+                            //   );
+                            // } else {
+                            //   setState(() {
+                            //     // errorMessage = "Login Failed";
+                            //     isLoading = false;
+                            //   });
+                            // }
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: size.height * 0.03,
+                                child: Image(
+                                  image: AssetImage("assets/images/search.png"),
+                                ),
+                              ),
+                              Container(
+                                alignment: Alignment.center,
+                                margin: EdgeInsets.only(left: 20),
+                                child: Text(
+                                  "Sign-Up with Google",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: 20,
                         ),
                         Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(left: 20),
-                          child: Text(
-                            "Sign-Up with Google",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 10),
+                          child: GestureDetector(
+                              onTap: () => {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()))
+                                  },
+                              child: Text(
+                                " Already Have an Account? Login",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              )),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 10),
-                    child: GestureDetector(
-                        onTap: () => {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Login()))
-                        },
-                        child: Text(
-                          " Already Have an Account? Login",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        )),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
-
+          );
   }
 
   // Widget InputFile({label, obscureText = false}) {

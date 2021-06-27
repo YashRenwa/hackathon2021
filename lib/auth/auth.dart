@@ -27,6 +27,23 @@ class Auth {
     return "Enter all fields";
   }
 
+  Future<String> signIn(String email, String password) async {
+    try {
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return "success";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return 'The password provided is too weak.';
+      } else if (e.code == 'email-already-in-use') {
+        return 'The account already exists for that email.';
+      }
+    } catch (e) {
+      return 'Failure';
+    }
+    return "Enter all fields";
+  }
+
   Future<User?> signInWithGoogle({required BuildContext context}) async {
     User? user;
 
