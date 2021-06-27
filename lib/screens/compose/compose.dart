@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hackathon2021/utilities/colors.dart';
 
+import '../../utilities/colors.dart';
+
 class ComposePage extends StatefulWidget {
   const ComposePage({Key? key}) : super(key: key);
 
@@ -9,13 +11,17 @@ class ComposePage extends StatefulWidget {
 }
 
 class _ComposePageState extends State<ComposePage> {
-  String currentSchedule = "Yearly Schedule";
+  DateTime pickedDate = DateTime.now();
+  TimeOfDay pickedTime = TimeOfDay.now();
+  String? selectedDay = "Monday";
+  String? currentSchedule = "Yearly Schedule";
   List<String> schedules = [
     "Yearly Schedule",
     "Monthly Schedule",
     "Weekly Schedule",
     "Recurring Schedule"
   ];
+
   List<String> actions = ["From", "To", "Cc"];
   @override
   Widget build(BuildContext context) {
@@ -36,6 +42,99 @@ class _ComposePageState extends State<ComposePage> {
             "Compose",
           ),
           actions: [
+            GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => StatefulBuilder(builder:
+                      (BuildContext context,
+                          StateSetter setState /*You can rename this!*/) {
+                    return SingleChildScrollView(
+                      child: Container(
+                        height: height * 0.5,
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                        child: Container(
+                          color: Color(0xff757575),
+                          child: Container(
+                            padding: EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text(
+                                  'Schedule',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 30.0,
+                                    color: Colors.blue,
+                                  ),
+                                ),
+                                SizedBox(height: height * 0.02),
+                                Center(
+                                  child: DropdownButton<String>(
+                                    hint: Text(
+                                      "Choose Schedule",
+                                      style: TextStyle(
+                                        fontSize: width * 0.05,
+                                      ),
+                                    ),
+                                    items: schedules.map((String dropDownItem) {
+                                      return DropdownMenuItem<String>(
+                                        value: dropDownItem,
+                                        child: Text(dropDownItem),
+                                      );
+                                    }).toList(),
+                                    value: currentSchedule,
+                                    onChanged: (newSchedule) {
+                                      setState(() {
+                                        currentSchedule = newSchedule;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(height: height * 0.02),
+                                dateAndTime(setState, height, width),
+                                SizedBox(height: height * 0.02),
+                                Container(
+                                  width: (width - 20),
+                                  height: (height * 0.07),
+                                  child: ElevatedButton(
+                                    child: Text(
+                                      'SUBMIT',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all<Color>(
+                                              kPrimaryColor),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.only(right: width * 0.04),
+                child: Icon(Icons.calendar_today),
+              ),
+            ),
             Container(
               margin: EdgeInsets.only(right: width * 0.04),
               child: Icon(Icons.send),
@@ -100,26 +199,6 @@ class _ComposePageState extends State<ComposePage> {
                 ),
               ),
             ),
-            DropdownButton<String>(
-              hint: Text(
-                "Choose Schedule",
-                style: TextStyle(
-                  fontSize: width * 0.05,
-                ),
-              ),
-              items: schedules.map((String dropDownItem) {
-                return DropdownMenuItem<String>(
-                  value: dropDownItem,
-                  child: Text(dropDownItem),
-                );
-              }).toList(),
-              value: currentSchedule,
-              onChanged: (newSchedule) {
-                setState(() {
-                  currentSchedule = newSchedule!;
-                });
-              },
-            ),
             Expanded(
               child: TextField(
                 style: TextStyle(fontSize: width * 0.05),
@@ -139,6 +218,93 @@ class _ComposePageState extends State<ComposePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget dateAndTime(StateSetter setState, double height, double width) {
+    if (currentSchedule == "Recurring Schedule") {
+      return Container();
+    } else if (currentSchedule == "Weekly Schedule") {
+      return Column(
+        children: [_pickDay(setState, width)],
+      );
+    } else {
+      return Column(
+        children: [
+          ListTile(
+            title: Text(
+                "Date: ${pickedDate.day}-${pickedDate.month}-${pickedDate.year}"),
+            trailing: Icon(Icons.keyboard_arrow_down),
+            onTap: () {
+              _pickdate(setState);
+            },
+          ),
+          SizedBox(height: height * 0.02),
+          ListTile(
+            title: Text("Time: ${pickedTime.hour}:${pickedTime.minute}"),
+            trailing: Icon(Icons.keyboard_arrow_down),
+            onTap: () {
+              _picktime(setState);
+            },
+          ),
+        ],
+      );
+    }
+  }
+
+  _pickdate(StateSetter setState) async {
+    var date = await showDatePicker(
+        context: context,
+        initialDate: pickedDate,
+        firstDate: DateTime(DateTime.now().year - 5),
+        lastDate: DateTime(DateTime.now().year + 5));
+
+    if (date != null)
+      setState(() {
+        pickedDate = date;
+      });
+  }
+
+  _picktime(StateSetter setState) async {
+    var time = await showTimePicker(
+      context: context,
+      initialTime: pickedTime,
+    );
+
+    if (time != null)
+      setState(() {
+        pickedTime = time;
+      });
+  }
+
+  _pickDay(StateSetter stateSetter, double width) {
+    return DropdownButton<String>(
+      hint: Text(
+        "Choose Schedule",
+        style: TextStyle(
+          fontSize: width * 0.05,
+        ),
+      ),
+      items: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ].map((String dropDownItem) {
+        return DropdownMenuItem<String>(
+          value: dropDownItem,
+          child: Text(dropDownItem),
+        );
+      }).toList(),
+      value: selectedDay,
+      onChanged: (day) {
+        stateSetter(() {
+          selectedDay = day;
+        });
+      },
     );
   }
 }
