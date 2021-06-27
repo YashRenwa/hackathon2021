@@ -60,13 +60,50 @@ class _HomeState extends State<Home> {
 
   Widget getBody(size) {
     return (Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          height: (size.height) * 0.3,
-          width: (size.width - 20),
-          decoration: BoxDecoration(),
+        Mailcard(
+          subjectdata: 'SubjectSubjectSubjectSubject',
         ),
       ],
     ));
+  }
+}
+
+class Mailcard extends StatelessWidget {
+  Mailcard({@required subjectdata});
+  String subjectdata = 'testingtestingtesting';
+  bool sent_status = false;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      height: 100,
+      width: double.maxFinite,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  subjectdata,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Row(
+                children: [
+                  sent_status ? Icon(Icons.check_box) : Icon(Icons.lock_clock),
+                  sent_status ? Text('sent') : Text('waiting'),
+                ],
+              )
+            ],
+          ),
+        ),
+        elevation: 5,
+      ),
+    );
   }
 }
