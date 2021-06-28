@@ -15,7 +15,7 @@ done using python and we have attached it for reference.
 
 The backend which is run google's cloud platform using a python instance.
 
-![WhatsApp Image 2021-06-27 at 21 49 26](https://user-images.githubusercontent.com/70462967/123552737-19ed1980-d795-11eb-8f41-4feaa62a7e6f.jpeg width="200")
+![WhatsApp Image 2021-06-27 at 21 49 26](https://user-images.githubusercontent.com/70462967/123552737-19ed1980-d795-11eb-8f41-4feaa62a7e6f.jpeg)
 
 The above screen is what greets you when you first open the app, it helps us to identify if you are a new or returning customer.
 
